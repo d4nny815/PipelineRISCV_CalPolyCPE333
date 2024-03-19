@@ -1,10 +1,15 @@
-#This file contains tests for R-type RISCV instructions WITH NO HAZARDS (by this I mean I added nops to prevent hazards)
+# THIS IS AN ALTERED VERISON OF THE TESTALL NO HAZARDS
+# WORKS FOR THE OTTER MEMORY 
+# BROKE DOWN la pueudo-instructions TO ITS CORE INSTRUCTIONS 
 
-#You can check to see if any of your tests fail using this link: https://piazza.com/class/kbprd1f9gqj5ro?cid=13
-# If new instructions are added, there are instructions that need to be adjusted
-# For example, in the U_tests section, the first addi points to the 
-# memory address of TESTU. For every command added, the immediate values
-# need to be adjusted by 4 * number of added commands.
+# SINCE BRANCH DOESN'T WORK FOR THE NOHAZARDS PIPELINE
+# THE CORE WILL CONTINUE PASS THE BRANCH WHEN IT SHOULD FAIL
+# I RECOMMEND CHECKING THE REGISTER VALUES FOR EVERY BRANCH INSTR SET A BREAK POINT
+# TO ENSURE THE INSTRUCTIONS WORK PROPERLY
+# SO IF bne fail ,CHECK THAT REGISTERS ARE EQUAL, VICE VERSA FOR BEQ
+
+# I ALSO RECOMMEND RARS AS THE DEBUGGING ENVIRONMENT
+# IT ALLOWS YOU TO SET BREAKPOINTS AND MOVE 1 INSTRUCTION AT A TIME
 
 .data
 	TESTLOAD: .word 50
@@ -347,9 +352,13 @@ Jump_tests:
 	
 Load_tests:	
 	nop
-	nop
+	nop 
 	#Load test
-	la t0, TESTLOAD
+	#la t0, TESTLOAD
+    auipc t0, 6
+    nop
+    nop
+    addi t0, t0, -984
 	nop
 	nop
 	lw t1, 0(t0)
@@ -363,7 +372,11 @@ STORE_tests:
 	nop
 	nop
 	#Store test
-	la t0, TESTSTORE
+	#la t0, TESTSTORE
+    auipc t0, 6
+    nop
+    nop
+    addi t0, t0, -1036
 	nop
 	nop
 	sw a0, 0(t0)
@@ -383,7 +396,11 @@ U_tests:
 	nop
 	
 	#Load upper immediate test
-	la t0, TESTU
+	#la t0, TESTU
+    auipc x5 6
+    nop
+    nop
+    addi x5 x5 -1108
 	nop
 	nop
 	lw t1, 0(t0) #t1 should now hold the value 6000
